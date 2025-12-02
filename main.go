@@ -35,5 +35,12 @@ func main() {
 }
 
 func runC() {
-	fmt.Print("test")
+	file, err := os.ReadFile("test.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	byteCount := len(file)
+
+	fmt.Println(byteCount)
 }
