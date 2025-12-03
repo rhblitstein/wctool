@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/urfave/cli/v2"
 )
@@ -18,11 +19,19 @@ func main() {
 				Usage:   "Return number of bytes in text",
 				Aliases: []string{"C"},
 			},
+			&cli.BoolFlag{
+				Name:    "w",
+				Usage:   "Return number of words in text",
+				Aliases: []string{"W"},
+			},
 		},
 		Action: func(c *cli.Context) error {
-			if c.Bool("c") {
+			switch {
+			case c.Bool("c"):
 				runC()
-			} else {
+			case c.Bool("w"):
+				runW()
+			default:
 				fmt.Println("Invalid flag")
 			}
 			return nil
@@ -41,6 +50,18 @@ func runC() {
 	}
 
 	byteCount := len(file)
-
 	fmt.Println(byteCount)
+}
+
+func runW() {
+	file, err := os.ReadFile("test.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	text := string(file)
+	words := strings.Fields(text)
+	wordCount := len(words)
+
+	fmt.Println(wordCount)
 }
